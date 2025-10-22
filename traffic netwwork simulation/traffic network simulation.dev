@@ -1,10 +1,10 @@
 [Project]
-FileName=Traffic Network Simulation.dev
-Name=Traffic Network Simulation
+FileName=traffic network simulation.dev
+Name=traffic network simulation
 Type=1
 Ver=2
 ObjFiles=
-Includes="D:\code\devc++\Project\Traffic Network Simulation\include"
+Includes="D:\code\devc++\project\traffic netwwork simulation\header"
 Libs=
 PrivateResource=
 ResourceIncludes=
@@ -19,7 +19,7 @@ ObjectOutput=
 LogOutput=
 LogOutputEnabled=0
 OverrideOutput=0
-OverrideOutputName=Traffic Network Simulation.exe
+OverrideOutputName=traffic network simulation.exe
 HostApplication=
 UseCustomMakefile=0
 CustomMakefile=
@@ -61,7 +61,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit2]
-FileName=include\node.hpp
+FileName=header\node.hpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -80,58 +80,18 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit5]
-FileName=src\base_obj.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit6]
-FileName=include\map.hpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit7]
-FileName=include\edge.hpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit8]
-FileName=include\base_object.hpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit9]
-FileName=src\base_object.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit4]
-FileName=include\base_obj.hpp
+FileName=header\map.hpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit5]
+FileName=src\map.cpp
 CompileCpp=1
 Folder=
 Compile=1
