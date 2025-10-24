@@ -1,19 +1,17 @@
 #pragma once
 #include <string>
-#include <iostream>
-using namespace std;
 
 class node{
 	protected:
-	    string name;
+	    std::string name;
 	    int id;
 	    double x, y;
 	
 	public:
 	    node();
-	    node(string n, int i, double x_pos, double y_pos);
+	    node(std::string n, int i, double x_pos, double y_pos);
 	
-	    string get_name() const;
+	    std::string get_name() const;
 	    int get_id() const;
 	    double get_x() const;
 	    double get_y() const;
@@ -28,7 +26,7 @@ class location : public node{
 	    int population;
 	
 	public:
-	    location(string n, int i, double x_pos, double y_pos, int pop);
+	    location(std::string n, int i, double x_pos, double y_pos, int pop);
 	    void display() const override;
 };
 
