@@ -2,7 +2,7 @@
 #include <string>
 
 class edge{
-	protected:
+	private:
 		std::string name;
 		int id;
 		int src, dest;
