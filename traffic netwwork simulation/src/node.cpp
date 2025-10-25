@@ -3,27 +3,29 @@
 using namespace std;
 
 // Ham dung ----------------
-node::node() : name(""), id(0), x(0), y(0){}
+node::node() : name(""), id(0), pos(0, 0){}
 
 node::node(string n, int i, double x_pos, double y_pos)
-    : name(n), id(i), x(x_pos), y(y_pos){}
+    : name(n), id(i), pos(x_pos, y_pos){}
 
 //get set ------------------
 string node::get_name() const{ return name; }
 int node::get_id() const{ return id; }
-double node::get_x() const{ return x; }
-double node::get_y() const{ return y; }
+coord node::get_pos() const { return pos;}
+double node::get_x() const{ return pos.x; }
+double node::get_y() const{ return pos.y; }
 
 //phuong thuc------------------------
 void node::display() const{
     cout << "Node [" << id << "] " << name
-         << " (" << x << ", " << y << ")\n";
+         << " (" << pos.x << ", " << pos.y << ")\n";
 }
 
+//===================================================
+//                  LOP KE THUA 
+//===================================================
 
-// =================== LOP KE THUA ==================
-
-//================== location ======================
+//=------------------- location ---------------------=
 //ham dung ---------------------
 location::location(string n, int i, double x_pos, double y_pos, int pop)
     : node(n, i, x_pos, y_pos), population(pop){}
