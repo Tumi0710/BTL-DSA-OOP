@@ -1,11 +1,12 @@
 #pragma once
+#include "coord.hpp"
 #include <string>
 
 class node{
 	private:
 	    std::string name;
 	    int id;
-	    double x, y;
+	    coord pos;
 	
 	public:
 	    node();
@@ -13,6 +14,7 @@ class node{
 	
 	    std::string get_name() const;
 	    int get_id() const;
+	    coord get_pos() const;
 	    double get_x() const;
 	    double get_y() const;
 	
