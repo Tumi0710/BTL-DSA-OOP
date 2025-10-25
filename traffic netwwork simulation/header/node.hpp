@@ -2,7 +2,7 @@
 #include <string>
 
 class node{
-	protected:
+	private:
 	    std::string name;
 	    int id;
 	    double x, y;

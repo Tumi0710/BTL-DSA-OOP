@@ -30,7 +30,7 @@ location::location(string n, int i, double x_pos, double y_pos, int pop)
 
 //phuong thuc --------------------
 void location::display() const{
-    cout << "City Node [" << id << "] " << name
-         << " (" << x << ", " << y << ") - Population: " << population << endl;
+	node::display();
+    cout << " - Population: " << population << endl;
 }
 
