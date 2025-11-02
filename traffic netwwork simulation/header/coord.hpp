@@ -2,6 +2,7 @@
 
 //coord = coordinate = toa do
 struct coord{
+	//x = kinh do, y = vi do 
 	double x, y;
 	
 	coord();

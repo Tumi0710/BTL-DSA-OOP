@@ -1,5 +1,6 @@
 #include "edge.hpp"
 #include <iostream>
+#include <iomanip> 
 
 using namespace std;
 
@@ -26,5 +27,5 @@ void edge::display() const{
     if (is_directed){
     	cout << " - Duong 1 chieu" << endl;
 	} else cout <<" - Duong 2 chieu" << endl;
-	cout << " - Do dai: " << weight << endl;
+	cout << " - Do dai: " << setprecision(2) << weight << " km" << endl;
 }

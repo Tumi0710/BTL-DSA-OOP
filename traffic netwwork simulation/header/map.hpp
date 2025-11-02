@@ -8,7 +8,9 @@ class map{
 	private:
 	    std::vector<std::unique_ptr<node>> nodes;
 	    std::vector<std::unique_ptr<edge>> edges;
-	    node* get_node(int id) const; 
+	    
+	    node* get_node(int id) const;		//de dung trong add edge by id 
+	    int cnt_branches(int id) const;		//de dung trong auto tinh loai giao lo (add edge by id)
 	
 	public:
 	    map();
