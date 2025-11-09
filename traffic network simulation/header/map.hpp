@@ -22,5 +22,10 @@ class map{
 	    void add_edge_by_id(std::string n, int i, int id_src, int id_dest, bool dir); 
 	
 	    void show_all() const;
+	    
+	    //tinh nang tim kiem
+		node* find_node_by_id(int id) const; 
+		
+		std::vector<node*> search_node_by_name(const std::string& n);
 };
 

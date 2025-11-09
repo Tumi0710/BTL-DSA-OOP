@@ -1,6 +1,8 @@
 #include "map.hpp"
 #include "coord.hpp"
 #include <iostream>
+#include <algorithm>
+#include <cctype>
 using namespace std;
 
 
@@ -44,12 +46,15 @@ void map::show_all() const{
         n->display();
     }
     
+    cout <<"\n-----------------------------------------------------------\n";
+    
     cout << "\n Danh sach cac edge:\n";
     for (const auto& e : edges){
         e->display();
     }
 }
 
+//them edge theo id
 void map::add_edge_by_id(string n, int i, int id_src, int id_dest, bool dir){
 	node* node_src = get_node(id_src);
 	node* node_dest = get_node(id_dest);
@@ -88,3 +93,54 @@ void map::add_edge_by_id(string n, int i, int id_src, int id_dest, bool dir){
         junction_dest->determine_type(branches);
     }
 }
+
+// ====================== TIM KIEM ===================
+// chuyen doi chuoi sang k viet hoa (ho tro trong tim kiem)
+string to_lower(const string& str){
+	string lower_str = str;
+	for (int i = 0; i < str.length(); i++){
+		lower_str[i] = tolower(str[i]);		//tolower co dau vao la int (ma ascii cua ky tu)
+	}
+	return lower_str;
+}
+
+//tim kiem node theo ten (partial_n = ten nguoi dung dang nhap)
+vector<node*> map::search_node_by_name(const std::string& partial_n){
+	//partial_n = 
+	vector<node*> rslt; //result;
+	
+	string lower_partial = to_lower(partial_n);
+	
+	//tim alll node (tim kiem tuyen tinh) 
+	for (const auto& n : nodes) {
+		//lay ten day du cua node roi chuyen ve viet thuong
+		string lower_full_n = to_lower(n->get_name());
+		
+		//tim kiem chuoi con
+		bool found = false;
+		for (size_t i = 0; i <= lower_full_n.length() - lower_partial.length(); i++){
+			bool mismatch = false;
+			//check node co khop ki tu voi chuoi ng dung dang nhap k
+			for(size_t j = 0; j < lower_partial.length(); j++){
+				if(lower_full_n[i+j] != lower_partial[j]){
+					mismatch = true;
+					break;
+				}
+			}
+			if(!mismatch){
+				found = true;
+				break;
+			}
+		}
+		if(found){
+            
+            junction* junc_ptr = dynamic_cast<junction*>(n.get());
+            if (junc_ptr == NULL) { 
+                rslt.push_back(n.get()); 
+            }
+        }
+	}
+	return rslt;
+}
+
+

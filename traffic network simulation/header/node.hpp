@@ -19,6 +19,7 @@ class node{
 	    double get_x() const;
 	    double get_y() const;
 	
+		void display_name() const;
 	    virtual void display() const;
 	    virtual ~node() = default;
 };
