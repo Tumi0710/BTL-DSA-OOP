@@ -1,0 +1,38 @@
+[
+{
+  "directory": "D:/TEST2/build",
+  "command": "D:\\mingw64\\bin\\g++.exe -DSFML_STATIC @CMakeFiles/TrafficSimulation.dir/includes_CXX.rsp  -O2 -march=native -g -g -DDEBUG -std=gnu++17 -o CMakeFiles\\TrafficSimulation.dir\\src\\Vehicle.cpp.obj -c D:\\TEST2\\src\\Vehicle.cpp",
+  "file": "D:/TEST2/src/Vehicle.cpp",
+  "output": "CMakeFiles/TrafficSimulation.dir/src/Vehicle.cpp.obj"
+},
+{
+  "directory": "D:/TEST2/build",
+  "command": "D:\\mingw64\\bin\\g++.exe -DSFML_STATIC @CMakeFiles/TrafficSimulation.dir/includes_CXX.rsp  -O2 -march=native -g -g -DDEBUG -std=gnu++17 -o CMakeFiles\\TrafficSimulation.dir\\src\\coord.cpp.obj -c D:\\TEST2\\src\\coord.cpp",
+  "file": "D:/TEST2/src/coord.cpp",
+  "output": "CMakeFiles/TrafficSimulation.dir/src/coord.cpp.obj"
+},
+{
+  "directory": "D:/TEST2/build",
+  "command": "D:\\mingw64\\bin\\g++.exe -DSFML_STATIC @CMakeFiles/TrafficSimulation.dir/includes_CXX.rsp  -O2 -march=native -g -g -DDEBUG -std=gnu++17 -o CMakeFiles\\TrafficSimulation.dir\\src\\edge.cpp.obj -c D:\\TEST2\\src\\edge.cpp",
+  "file": "D:/TEST2/src/edge.cpp",
+  "output": "CMakeFiles/TrafficSimulation.dir/src/edge.cpp.obj"
+},
+{
+  "directory": "D:/TEST2/build",
+  "command": "D:\\mingw64\\bin\\g++.exe -DSFML_STATIC @CMakeFiles/TrafficSimulation.dir/includes_CXX.rsp  -O2 -march=native -g -g -DDEBUG -std=gnu++17 -o CMakeFiles\\TrafficSimulation.dir\\src\\main.cpp.obj -c D:\\TEST2\\src\\main.cpp",
+  "file": "D:/TEST2/src/main.cpp",
+  "output": "CMakeFiles/TrafficSimulation.dir/src/main.cpp.obj"
+},
+{
+  "directory": "D:/TEST2/build",
+  "command": "D:\\mingw64\\bin\\g++.exe -DSFML_STATIC @CMakeFiles/TrafficSimulation.dir/includes_CXX.rsp  -O2 -march=native -g -g -DDEBUG -std=gnu++17 -o CMakeFiles\\TrafficSimulation.dir\\src\\map.cpp.obj -c D:\\TEST2\\src\\map.cpp",
+  "file": "D:/TEST2/src/map.cpp",
+  "output": "CMakeFiles/TrafficSimulation.dir/src/map.cpp.obj"
+},
+{
+  "directory": "D:/TEST2/build",
+  "command": "D:\\mingw64\\bin\\g++.exe -DSFML_STATIC @CMakeFiles/TrafficSimulation.dir/includes_CXX.rsp  -O2 -march=native -g -g -DDEBUG -std=gnu++17 -o CMakeFiles\\TrafficSimulation.dir\\src\\node.cpp.obj -c D:\\TEST2\\src\\node.cpp",
+  "file": "D:/TEST2/src/node.cpp",
+  "output": "CMakeFiles/TrafficSimulation.dir/src/node.cpp.obj"
+}
+]

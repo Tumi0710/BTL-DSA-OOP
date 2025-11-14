@@ -5,10 +5,10 @@
 using namespace std;
 
 // ham dung --------------------------------
-edge::edge() : name(""), id(0), src(0), dest(0), weight(0), is_directed(false){}
+edge::edge() : name(""), id(0), src(0), dest(0), weight(0), is_directed(false), m_vehicleCount(0) {} // <-- Khởi tạo
 
 edge::edge(string n, int i, int s, int d, double w, bool dir)
-	: name(n), id(i), src(s), dest(d), weight(w), is_directed(dir){}
+	: name(n), id(i), src(s), dest(d), weight(w), is_directed(dir), m_vehicleCount(0) {} // <-- Khởi tạo
 
 
 //get set ----------------------------------
@@ -29,3 +29,19 @@ void edge::display() const{
 	} else cout <<" - Duong 2 chieu" << endl;
 	cout << " - Do dai: " << setprecision(2) << weight << " km" << endl;
 }
+
+// --- ⭐ NÂNG CẤP "GOOGLE MAPS" ---
+void edge::addVehicle() {
+    m_vehicleCount++;
+}
+
+void edge::removeVehicle() {
+    if (m_vehicleCount > 0) {
+        m_vehicleCount--;
+    }
+}
+
+int edge::getVehicleCount() const {
+    return m_vehicleCount;
+}
+// -------------------------------

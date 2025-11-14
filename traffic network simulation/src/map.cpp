@@ -3,90 +3,95 @@
 #include <iostream>
 #include <algorithm>
 #include <cctype>
-using namespace std;
+#include <queue>
 
-
-//ham dung -------------------
 map::map(){}
 
-void map::add_node(unique_ptr<node> n){
-    nodes.push_back(move(n));
+map::~map() {
+    for (node* n : nodes) {
+        delete n;
+    }
+    for (edge* e : edges) {
+        delete e;
+    }
 }
 
-void map::add_edge(unique_ptr<edge> e){
-	edges.push_back(move(e));
+void map::add_node(node* n){ 
+    nodes.push_back(n); 
+    m_nodeMap[n->get_id()] = n;
 }
 
+void map::add_edge(edge* e){ 
+	edges.push_back(e); 
+	
+	int src = e->get_src();
+    int dest = e->get_dest();
+    
+    m_edgesByNode[src].push_back(e);
+    if (!e->get_direction()) {
+        m_edgesByNode[dest].push_back(e);
+    }
+    
+    m_edgeMap[{src, dest}] = e;
+    if (!e->get_direction()) {
+        m_edgeMap[{dest, src}] = e;
+    }
+}
 
-//ham phuong thuc -----------------------
-//----- private ----
 node* map::get_node(int id) const {
-	for (const auto& n : nodes){
-		if(n->get_id() == id)	return n.get();
-	}
-	return NULL;
+    auto it = m_nodeMap.find(id);
+    return it != m_nodeMap.end() ? it->second : nullptr;
 }
 
 int map::cnt_branches(int id) const {
-    int cnt = 0;
-    for (const auto& e : edges){
-    	//dem neu node do la nguon hoac dich cua edge
-        if (e->get_src() == id || e->get_dest() == id){
-            cnt++;
-        }
+    auto it = m_edgesByNode.find(id);
+    if (it != m_edgesByNode.end()) {
+        return it->second.size();
     }
-    return cnt;
+    return 0;
 }
 
-
-// ----- public -------
 void map::show_all() const{
-    cout << "\n Danh sach cac node:\n";
-    for (const auto& n : nodes){
-        n->display();
+    std::cout << "\n Danh sach cac node:\n";
+    for (node* n : nodes){ 
+        n->display(); 
     }
     
-    cout <<"\n-----------------------------------------------------------\n";
+    std::cout <<"\n-----------------------------------------------------------\n";
     
-    cout << "\n Danh sach cac edge:\n";
-    for (const auto& e : edges){
-        e->display();
+    std::cout << "\n Danh sach cac edge:\n";
+    for (edge* e : edges){ 
+        e->display(); 
     }
 }
 
-//them edge theo id
-void map::add_edge_by_id(string n, int i, int id_src, int id_dest, bool dir){
+void map::add_edge_by_id(std::string n, int i, int id_src, int id_dest, bool dir){
 	node* node_src = get_node(id_src);
 	node* node_dest = get_node(id_dest);
 	
 	if( node_src == NULL || node_dest == NULL){
-        cout << "Loi: Khong the them Edge " << n << " vi thieu Node sau: ";
+        std::cout << "Loi: Khong the them Edge " << n << " vi thieu Node sau: ";
         if (node_src == NULL){
-            cout << "Node nguon ID " << id_src;
-            if (node_dest == NULL) cout << " va ";
+            std::cout << "Node nguon ID " << id_src;
+            if (node_dest == NULL) std::cout << " va ";
         }
         if (node_dest == NULL){
-            cout << "Node dich ID " << id_dest;
+            std::cout << "Node dich ID " << id_dest;
         }
-        cout << ".\n";
+        std::cout << ".\n";
 		return;
 	}
 	
 	double distance = node_src->get_coord().distance(node_dest->get_coord());
-	//dung unique ptr nen new edge auto huy
-	unique_ptr<edge> e(new edge(n, i, id_src, id_dest, distance, dir));
 	
-	edges.push_back(move(e));
-	
-	
-	//check source node (node nguon) 
-	junction* junction_src = dynamic_cast<junction*>(node_src);		//check xem co phai node junc k 
-    if (junction_src != NULL){
-        int branches = cnt_branches(id_src);		//dem so branch 
-        junction_src->determine_type(branches);		//auto update junc type 
-    }
+    edge* e = new edge(n, i, id_src, id_dest, distance, dir); 
+	add_edge(e);
 
-    // check dest node (node dich) 
+	junction* junction_src = dynamic_cast<junction*>(node_src);		
+    if (junction_src != NULL){
+        int branches = cnt_branches(id_src);		
+        junction_src->determine_type(branches);		
+    }
     junction* junction_dest = dynamic_cast<junction*>(node_dest);
     if (junction_dest != NULL){
         int branches = cnt_branches(id_dest);
@@ -94,33 +99,22 @@ void map::add_edge_by_id(string n, int i, int id_src, int id_dest, bool dir){
     }
 }
 
-// ====================== TIM KIEM ===================
-// chuyen doi chuoi sang k viet hoa (ho tro trong tim kiem)
-string to_lower(const string& str){
-	string lower_str = str;
+std::string to_lower(const std::string& str){ 
+	std::string lower_str = str; 
 	for (int i = 0; i < str.length(); i++){
-		lower_str[i] = tolower(str[i]);		//tolower co dau vao la int (ma ascii cua ky tu)
+		lower_str[i] = tolower(str[i]);		
 	}
 	return lower_str;
 }
 
-//tim kiem node theo ten (partial_n = ten nguoi dung dang nhap)
-vector<node*> map::search_node_by_name(const std::string& partial_n){
-	//partial_n = 
-	vector<node*> rslt; //result;
-	
-	string lower_partial = to_lower(partial_n);
-	
-	//tim alll node (tim kiem tuyen tinh) 
-	for (const auto& n : nodes) {
-		//lay ten day du cua node roi chuyen ve viet thuong
-		string lower_full_n = to_lower(n->get_name());
-		
-		//tim kiem chuoi con
+std::vector<node*> map::search_node_by_name(const std::string& partial_n){ 
+	std::vector<node*> rslt; 
+	std::string lower_partial = to_lower(partial_n); 
+	for (node* n : nodes) { 
+		std::string lower_full_n = to_lower(n->get_name()); 
 		bool found = false;
 		for (size_t i = 0; i <= lower_full_n.length() - lower_partial.length(); i++){
 			bool mismatch = false;
-			//check node co khop ki tu voi chuoi ng dung dang nhap k
 			for(size_t j = 0; j < lower_partial.length(); j++){
 				if(lower_full_n[i+j] != lower_partial[j]){
 					mismatch = true;
@@ -133,14 +127,97 @@ vector<node*> map::search_node_by_name(const std::string& partial_n){
 			}
 		}
 		if(found){
-            
-            junction* junc_ptr = dynamic_cast<junction*>(n.get());
+            junction* junc_ptr = dynamic_cast<junction*>(n); 
             if (junc_ptr == NULL) { 
-                rslt.push_back(n.get()); 
+                rslt.push_back(n); 
             }
         }
 	}
 	return rslt;
 }
 
+node* map::find_node_by_id(int id) const {
+    auto it = m_nodeMap.find(id);
+    return it != m_nodeMap.end() ? it->second : nullptr;
+}
 
+const std::vector<node*>& map::getNodes() const {
+    return nodes;
+}
+
+const std::vector<edge*>& map::getEdges() const {
+    return edges;
+}
+
+using P = std::pair<double, int>; 
+struct ComparePair {
+    bool operator()(const P& a, const P& b) {
+        return a.first > b.first;
+    }
+};
+
+void map::build_adjList(){
+	std::cout << "Building Adjacency List...\n"; 
+    for (node* n : nodes) {
+        adjList[n->get_id()] = std::vector<Neighbor>(); 
+    }
+    for (edge* e : edges) {
+        adjList[e->get_src()].push_back({e->get_dest(), e->get_weight()});
+        if (!e->get_direction()) {
+            adjList[e->get_dest()].push_back({e->get_src(), e->get_weight()});
+        }
+    }
+    std::cout << "Adjacency List built!\n"; 
+}
+
+std::vector<int> map::dijkstra(int startId, int endId) { 
+    std::map<int, double> dist; 
+    std::map<int, int> prev;   
+    std::priority_queue<P, std::vector<P>, ComparePair> pq; 
+    for (const auto& pair : adjList) {
+        dist[pair.first] = std::numeric_limits<double>::infinity(); 
+        prev[pair.first] = -1; 
+    }
+    dist[startId] = 0;
+    pq.push({0.0, startId}); 
+    while (!pq.empty()) {
+        double d = pq.top().first;
+        int u = pq.top().second;
+        pq.pop();
+        if (d > dist[u]) { continue; }
+        if (u == endId) { break; }
+        for (const auto& neighbor : adjList.at(u)) {
+            int v = neighbor.id;
+            double weight = neighbor.weight;
+            double newDist = dist[u] + weight;
+            if (newDist < dist[v]) {
+                dist[v] = newDist;
+                prev[v] = u; 
+                pq.push({newDist, v}); 
+            }
+        }
+    }
+    std::vector<int> path; 
+    int curr = endId;
+    if (prev[curr] == -1) { return path; }
+    while (curr != -1) {
+        path.push_back(curr);
+        curr = prev[curr];
+    }
+    std::reverse(path.begin(), path.end()); 
+    return path;
+}
+
+edge* map::getEdge(int srcId, int destId) {
+    auto it = m_edgeMap.find({srcId, destId});
+    if (it != m_edgeMap.end()) {
+        return it->second;
+    }
+    return nullptr;
+}
+
+const std::vector<edge*>& map::get_edges_from_node(int nodeId) const {
+    static std::vector<edge*> empty;
+    auto it = m_edgesByNode.find(nodeId);
+    return it != m_edgesByNode.end() ? it->second : empty;
+}

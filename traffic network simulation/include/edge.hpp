@@ -8,7 +8,10 @@ class edge{
 		int id;
 		int src, dest;
 		double weight;
-		bool is_directed; //co huong 
+		bool is_directed; 
+		
+		int m_vehicleCount; // (Cần cho logic Google Maps)
+		
 	public:
 		edge();
 		edge(std::string n, int i, int s, int d, double w, bool dir);
@@ -22,4 +25,9 @@ class edge{
 		
 		virtual void display() const;
 		virtual ~edge() = default;
+
+		// (Cần cho logic Google Maps)
+		void addVehicle();
+		void removeVehicle();
+		int getVehicleCount() const;
 };
