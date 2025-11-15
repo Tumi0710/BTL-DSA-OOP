@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "d:/TEST2/build"
+			"value" : "c:/Users/Minhtran123/OneDrive - Hochiminh City University of Education/Desktop/BTL-DSA-OOP/traffic network simulation/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -155,10 +155,10 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
+					"value" : "CXX compiler"
 				}
 			],
-			"type" : "FILEPATH",
+			"type" : "STRING",
 			"value" : "D:/mingw64/bin/g++.exe"
 		},
 		{
@@ -299,10 +299,10 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
+					"value" : "C compiler"
 				}
 			],
-			"type" : "FILEPATH",
+			"type" : "STRING",
 			"value" : "D:/mingw64/bin/gcc.exe"
 		},
 		{
@@ -575,7 +575,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/TEST2/build/CMakeFiles/pkgRedirects"
+			"value" : "C:/Users/Minhtran123/OneDrive - Hochiminh City University of Education/Desktop/BTL-DSA-OOP/traffic network simulation/build/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -647,7 +647,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "D:/TEST2"
+			"value" : "C:/Users/Minhtran123/OneDrive - Hochiminh City University of Education/Desktop/BTL-DSA-OOP/traffic network simulation"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1283,7 +1283,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/TEST2/build"
+			"value" : "C:/Users/Minhtran123/OneDrive - Hochiminh City University of Education/Desktop/BTL-DSA-OOP/traffic network simulation/build"
 		},
 		{
 			"name" : "TrafficSimulation_IS_TOP_LEVEL",
@@ -1307,7 +1307,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/TEST2"
+			"value" : "C:/Users/Minhtran123/OneDrive - Hochiminh City University of Education/Desktop/BTL-DSA-OOP/traffic network simulation"
 		},
 		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",

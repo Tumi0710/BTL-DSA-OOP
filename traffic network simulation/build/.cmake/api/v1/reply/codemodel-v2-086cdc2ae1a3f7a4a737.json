@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "TrafficSimulation::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-TrafficSimulation-Debug-91b54545accda19a0f3e.json",
+					"jsonFile" : "target-TrafficSimulation-Debug-4eeed0d72bc0c4b4b40d.json",
 					"name" : "TrafficSimulation",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "D:/TEST2/build",
-		"source" : "D:/TEST2"
+		"build" : "C:/Users/Minhtran123/OneDrive - Hochiminh City University of Education/Desktop/BTL-DSA-OOP/traffic network simulation/build",
+		"source" : "C:/Users/Minhtran123/OneDrive - Hochiminh City University of Education/Desktop/BTL-DSA-OOP/traffic network simulation"
 	},
 	"version" : 
 	{
