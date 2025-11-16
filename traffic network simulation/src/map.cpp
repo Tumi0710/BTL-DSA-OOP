@@ -65,6 +65,7 @@ void map::show_all() const{
     }
 }
 
+// HÀM CŨ (5 tham số - Tự động tính khoảng cách "chim bay")
 void map::add_edge_by_id(std::string n, int i, int id_src, int id_dest, bool dir){
 	node* node_src = get_node(id_src);
 	node* node_dest = get_node(id_dest);
@@ -82,6 +83,7 @@ void map::add_edge_by_id(std::string n, int i, int id_src, int id_dest, bool dir
 		return;
 	}
 	
+    // Tự động tính khoảng cách (nên dùng Haversine nếu bạn đã sửa coord.cpp)
 	double distance = node_src->get_coord().distance(node_dest->get_coord());
 	
     edge* e = new edge(n, i, id_src, id_dest, distance, dir); 
@@ -98,6 +100,41 @@ void map::add_edge_by_id(std::string n, int i, int id_src, int id_dest, bool dir
         junction_dest->determine_type(branches);
     }
 }
+
+// ⭐ HÀM MỚI (6 tham số - Nhận khoảng cách thủ công) ⭐
+void map::add_edge_by_id(std::string n, int i, int id_src, int id_dest, double manual_weight_km, bool dir){
+	node* node_src = get_node(id_src);
+	node* node_dest = get_node(id_dest);
+	
+	if( node_src == NULL || node_dest == NULL){
+        std::cout << "Loi: Khong the them Edge " << n << " vi thieu Node sau: ";
+        if (node_src == NULL){
+            std::cout << "Node nguon ID " << id_src;
+            if (node_dest == NULL) std::cout << " va ";
+        }
+        if (node_dest == NULL){
+            std::cout << "Node dich ID " << id_dest;
+        }
+        std::cout << ".\n";
+		return;
+	}
+	
+	// Sử dụng khoảng cách thủ công (km) được truyền vào
+    edge* e = new edge(n, i, id_src, id_dest, manual_weight_km, dir); 
+	add_edge(e);
+
+	junction* junction_src = dynamic_cast<junction*>(node_src);		
+    if (junction_src != NULL){
+        int branches = cnt_branches(id_src);		
+        junction_src->determine_type(branches);		
+    }
+    junction* junction_dest = dynamic_cast<junction*>(node_dest);
+    if (junction_dest != NULL){
+        int branches = cnt_branches(id_dest);
+        junction_dest->determine_type(branches);
+    }
+}
+
 
 std::string to_lower(const std::string& str){ 
 	std::string lower_str = str; 

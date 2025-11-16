@@ -3,7 +3,7 @@
 #include <iostream>
 #include <map> 
 #include <vector>
-#include <cmath>
+#include <cmath> // Cần cho atan2
 #include <limits>
 #include <list> 
 #include <random> 
@@ -15,9 +15,11 @@
 #include "ViewUtils.hpp" 
 #include "Vehicle.hpp" 
 
-using namespace map_types;
+// Cần cho hằng số M_PI (dùng để tính góc)
+#define _USE_MATH_DEFINES
+#include <math.h>
 
-// (Đã xóa WINDOW_WIDTH, WINDOW_HEIGHT vì chúng nằm trong ViewUtils.hpp)
+using namespace map_types;
 
 // --- Thống kê hệ thống ---
 class Statistics {
@@ -77,18 +79,23 @@ sf::View view;
 
 Statistics stats;
 
-// (loadMapData giữ nguyên)
+
+// ===== HÀM loadMapData PHIÊN BẢN CUỐI (ĐÃ KẾT NỐI CÁC ĐỊA ĐIỂM LƠ LỬNG) =====
 void loadMapData(map& q1) {
     std::cout << "Loading map data...\n";
-    q1.add_node(new location("Dinh doc lap", 10, 106.69655, 10.78251, 500, lo_type::TOURIST_ATTRACTION));
-    q1.add_node(new location("Thao cam vien", 11, 106.70779, 10.78841, 1000, lo_type::TOURIST_ATTRACTION));
-    q1.add_node(new location("Cong vien 23/9", 12, 106.69234, 10.76876, 1000, lo_type::TOURIST_ATTRACTION));
-    q1.add_node(new location("Toa Bitexco", 13, 106.70437, 10.77172, 1500, lo_type::LANDMARK));
+
+    // --- CÁC ĐỊA ĐIỂM (LOCATION) ---
+    q1.add_node(new location("Dinh doc lap", 10, 106.69556, 10.77722, 500, lo_type::TOURIST_ATTRACTION));
+    q1.add_node(new location("Thao cam vien", 11, 106.70472, 10.78806, 1000, lo_type::TOURIST_ATTRACTION));
+    q1.add_node(new location("Cong vien 23/9", 12, 106.69380, 10.76940, 1000, lo_type::TOURIST_ATTRACTION));
+    q1.add_node(new location("Toa Bitexco", 13, 106.70444, 10.77167, 1500, lo_type::LANDMARK));
     q1.add_node(new location("Nha tho duc ba", 14, 106.69900, 10.77992, 300, lo_type::TOURIST_ATTRACTION));
-    q1.add_node(new location("Cho Ben Thanh", 15, 106.69805, 10.77265, 750, lo_type::TOURIST_ATTRACTION));
+    q1.add_node(new location("Cho Ben Thanh", 15, 106.69806, 10.77250, 750, lo_type::TOURIST_ATTRACTION));
     q1.add_node(new location("Pho Ong Cat Gia Truyen Since 1988", 16, 106.69309, 10.76851, 25, lo_type::RESTAURANT));
     q1.add_node(new location("Nori - Modern Izakaya", 17, 106.69690, 10.77403, 50, lo_type::RESTAURANT));
     q1.add_node(new location("Trung tam bao hanh Asus", 18, 106.68918, 10.77317, 75, lo_type::OTHERS));
+    
+    // --- CÁC NÚT GIAO (JUNCTION) ---
     q1.add_node(new junction("GL_CMT8_ND", 100, 106.70222, 10.78440, junction_type::UNDEFINED));
     q1.add_node(new junction("GL_DDL1", 101, 106.69305, 10.77735, junction_type::UNDEFINED));
     q1.add_node(new junction("GL_DDL2", 102, 106.69500, 10.77956, junction_type::UNDEFINED));
@@ -98,35 +105,64 @@ void loadMapData(map& q1) {
     q1.add_node(new junction("GL_CNTD8", 106, 106.69990, 10.77896, junction_type::UNDEFINED));
     q1.add_node(new junction("GL_NTDB1", 107, 106.69809, 10.78288, junction_type::UNDEFINED));
     q1.add_node(new junction("GL_NTDB2", 108, 106.70102, 10.78019, junction_type::UNDEFINED));
-    q1.add_node(new junction("GL_CBT", 109, 106.69712, 10.77399, junction_type::UNDEFINED));
-    q1.add_node(new junction("GL_BFT1", 110, 106.70433, 10.77087, junction_type::UNDEFINED));
-    q1.add_node(new junction("GL_CV1", 111, 106.69536, 10.76807, junction_type::UNDEFINED));
-    q1.add_node(new junction("GL_CV2", 112, 106.69816, 10.77120, junction_type::UNDEFINED));
+    q1.add_node(new junction("GL_CBT", 109, 106.69712, 10.77399, junction_type::UNDEFINED)); // Gần Nori (17)
+    q1.add_node(new junction("GL_BFT1", 110, 106.70433, 10.77087, junction_type::UNDEFINED)); // Gần Bitexco (13)
+    q1.add_node(new junction("GL_CV1", 111, 106.69536, 10.76807, junction_type::UNDEFINED)); // Gần CV 23/9 (12) và Phở (16)
+    q1.add_node(new junction("GL_CV2", 112, 106.69816, 10.77120, junction_type::UNDEFINED)); // Gần Chợ Bến Thành (15)
     q1.add_node(new junction("GL_CBT1", 113, 106.69995, 10.77324, junction_type::UNDEFINED));
     q1.add_node(new junction("GL_NTDB2", 114, 106.70208, 10.77555, junction_type::UNDEFINED));
-    q1.add_node(new junction("GL_TVC", 115, 106.70788, 10.78442, junction_type::UNDEFINED));
-    q1.add_edge_by_id("Duong Huyen Tran Cong Chua", 101104, 101, 104, 0);
-    q1.add_edge_by_id("Duong Nguyen Thi Minh Khai", 101102, 101, 102, 0);
-    q1.add_edge_by_id("Duong Nguyen Du", 102103, 102, 103, 0);
-    q1.add_edge_by_id("Duong Ly Tu Trong", 104109, 104, 109, 0);
-    q1.add_edge_by_id("Duong Le Thanh Ton", 109112, 109, 112, 0);
-    q1.add_edge_by_id("Duong Truong Dinh", 105111, 105, 111, 0);
-    q1.add_edge_by_id("Duong Pham Hong Thai", 105109, 105, 109, 0);
-    q1.add_edge_by_id("Duong Cong Xa Paris", 106108, 106, 108, 0);
-    q1.add_edge_by_id("Duong Han Thuyen", 107106, 107, 106, 0);
-    q1.add_edge_by_id("Duong Dinh Tien Hoang", 108115, 108, 115, 0);
-    q1.add_edge_by_id("Duong Le Duan", 108102, 108, 102, 0);
-    q1.add_edge_by_id("Duong Le Duan 2", 108100, 108, 100, 0);
-    q1.add_edge_by_id("Duong Thach Lam", 115100, 115, 100, 0);
-    q1.add_edge_by_id("Loi vao Dinh Doc Lap", 1010, 103, 10, 0);
-    q1.add_edge_by_id("Loi vao Nha Tho Duc Ba", 14106, 14, 106, 0);
-    q1.add_edge_by_id("Loi vao Thao Cam Vien", 11115, 11, 115, 0);
-    q1.add_edge_by_id("Loi vao Bitexco", 13110, 13, 110, 0);
-    q1.add_edge_by_id("Loi vao Cho Ben Thanh", 15112, 15, 112, 0);
+    q1.add_node(new junction("GL_TVC", 115, 106.70788, 10.78442, junction_type::UNDEFINED)); // Gần Thảo Cầm Viên (11)
+    q1.add_node(new junction("GL_PAS_ND", 116, 106.6967, 10.7788, junction_type::UNDEFINED));
+    q1.add_node(new junction("GL_PAS_LL", 117, 106.6990, 10.7725, junction_type::UNDEFINED)); 
+    q1.add_node(new junction("GL_NGH_LL", 118, 106.7022, 10.7730, junction_type::UNDEFINED)); 
+    q1.add_node(new junction("GL_NGH_HN", 119, 106.7038, 10.7705, junction_type::UNDEFINED)); // Gần Bitexco (13)
+    q1.add_node(new junction("GL_NKKN_HN", 120, 106.6995, 10.7695, junction_type::UNDEFINED)); 
+
+    // --- CÁC CẠNH (EDGES) ---
+    q1.add_edge_by_id("Duong Huyen Tran Cong Chua", 101104, 101, 104, 0.40, 1); 
+    q1.add_edge_by_id("Duong Nguyen Thi Minh Khai", 101102, 101, 102, 0.35, 0); 
+    q1.add_edge_by_id("Duong Nguyen Du", 102103, 102, 103, 0.45, 1); 
+    q1.add_edge_by_id("Duong Ly Tu Trong", 104109, 104, 109, 0.35, 1); 
+    q1.add_edge_by_id("Duong Le Thanh Ton", 109112, 109, 112, 0.40, 1); 
+    q1.add_edge_by_id("Duong Truong Dinh", 105111, 105, 111, 0.40, 0); 
+    q1.add_edge_by_id("Duong Pham Hong Thai", 105109, 105, 109, 0.30, 0); 
+    q1.add_edge_by_id("Duong Cong Xa Paris", 106108, 106, 108, 0.26, 0); 
+    q1.add_edge_by_id("Duong Han Thuyen", 107106, 107, 106, 0.28, 1); 
+    q1.add_edge_by_id("Duong Dinh Tien Hoang", 108115, 108, 115, 0.50, 0); 
+    q1.add_edge_by_id("Duong Le Duan", 108102, 108, 102, 0.70, 0); 
+    q1.add_edge_by_id("Duong Le Duan 2", 108100, 108, 100, 0.20, 0); 
+    q1.add_edge_by_id("Duong Thach Lam", 115100, 115, 100, 0.65, 0); 
+    q1.add_edge_by_id("Duong Nguyen Du (doan 2)", 103116, 103, 116, 0.18, 1); 
+    q1.add_edge_by_id("Duong Pasteur", 116104, 116, 104, 0.45, 1); 
+    q1.add_edge_by_id("Duong Pasteur (doan 2)", 104117, 104, 117, 0.30, 1); 
+    q1.add_edge_by_id("Duong Le Loi (doan 1)", 117118, 117, 118, 0.35, 1); 
+    q1.add_edge_by_id("Duong Le Loi (doan 2)", 112117, 112, 117, 0.10, 1); 
+    q1.add_edge_by_id("Pho di bo Nguyen Hue", 118119, 118, 119, 0.40, 1); 
+    q1.add_edge_by_id("Duong Ham Nghi", 120119, 120, 119, 0.50, 0); 
+    q1.add_edge_by_id("Duong NKKN (doan 2)", 112120, 112, 120, 0.25, 1); 
+    q1.add_edge_by_id("Ket noi Ham Nghi - CV 23/9", 120111, 120, 111, 0.50, 0); 
+    
+    // --- LỐI VÀO CÁC ĐỊA ĐIỂM ---
+    q1.add_edge_by_id("Loi vao Dinh Doc Lap", 1010, 103, 10, 0.15, 0); 
+    q1.add_edge_by_id("Loi vao Nha Tho Duc Ba", 14106, 14, 106, 0.05, 0); 
+    q1.add_edge_by_id("Loi vao Thao Cam Vien", 11115, 11, 115, 0.10, 0); 
+    q1.add_edge_by_id("Loi vao Bitexco", 13110, 13, 110, 0.05, 0); 
+    q1.add_edge_by_id("Loi vao Cho Ben Thanh", 15112, 15, 112, 0.10, 0); 
+    q1.add_edge_by_id("Loi vao Bitexco 2", 119110, 119, 110, 0.10, 0);
+    q1.add_edge_by_id("Loi vao Nori Izakaya", 17109, 17, 109, 0.05, 0); // Nối Nori (17) -> GL_CBT (109)
+    q1.add_edge_by_id("Loi vao CV 23/9", 12111, 12, 111, 0.05, 0); // Nối CV 23/9 (12) -> GL_CV1 (111)
+    q1.add_edge_by_id("Loi vao Pho Ong Cat", 16111, 16, 111, 0.10, 0); // Nối Phở (16) -> GL_CV1 (111)
+    
     std::cout << "Map data loaded!\n";
+
+    // --- CẤU HÌNH ĐÈN GIAO THÔNG ---
 	dynamic_cast<junction*>(q1.find_node_by_id(102))->setHasTrafficLight(true, 7.f, 2.f, 9.f, 0.0f);
 	dynamic_cast<junction*>(q1.find_node_by_id(103))->setHasTrafficLight(true, 6.f, 2.f, 8.f, 0.33f);
 	dynamic_cast<junction*>(q1.find_node_by_id(106))->setHasTrafficLight(true, 8.f, 2.f, 10.f, 0.66f);
+    dynamic_cast<junction*>(q1.find_node_by_id(112))->setHasTrafficLight(true, 7.f, 2.f, 9.f, 0.15f);
+    dynamic_cast<junction*>(q1.find_node_by_id(118))->setHasTrafficLight(true, 8.f, 2.f, 10.f, 0.45f);
+    dynamic_cast<junction*>(q1.find_node_by_id(119))->setHasTrafficLight(true, 7.f, 2.f, 9.f, 0.75f);
+
     std::cout << "Smart traffic lights configured!\n";
 }
 
@@ -145,7 +181,7 @@ int findClosestNode(sf::Vector2f worldMousePos,
         float dx = projectedPos.x - worldMousePos.x;
         float dy = projectedPos.y - worldMousePos.y;
         float distance = std::sqrt(dx*dx + dy*dy);
-        if (distance < minDistance && distance < 20.0f) { 
+        if (distance < minDistance && distance < 30.0f) { // Tăng khoảng cách click
             minDistance = distance;
             closestNodeId = n->get_id();
         }
@@ -158,8 +194,6 @@ int main()
     sf::RenderWindow window(sf::VideoMode(sf::Vector2u(WINDOW_WIDTH, WINDOW_HEIGHT)), "Traffic Simulation - Optimized");
     window.setFramerateLimit(60);
 
-    // ===== ĐÃ XÓA TẢI ẢNH BẢN ĐỒ =====
-
     sf::Font font;
     if (!font.openFromFile("assets/ARIAL.TTF")) {
         std::cerr << "Loi: Khong tai duoc font 'assets/ARIAL.TTF'\n";
@@ -167,26 +201,34 @@ int main()
         return -1; 
     }
     
+    // Mẫu cho Tên Địa điểm (Location)
     sf::Text locationNameText(font, "", 12);
     locationNameText.setFillColor(sf::Color(220, 220, 220)); 
 
+    // Mẫu cho Tên Nút giao (Junction)
+    sf::Text junctionNameText(font, "", 9); // Font nhỏ hơn
+    junctionNameText.setFillColor(sf::Color(150, 150, 150)); // Màu xám
+
+    // Mẫu cho Tên Đường (Road) - Sẽ dùng trong vòng lặp render
+    sf::Text roadNameText(font, "", 9);
+    roadNameText.setFillColor(sf::Color(200, 200, 0, 150)); // Màu vàng, hơi mờ
+
+
     std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(rd()); // Đã sửa lỗi 'G'
     std::uniform_int_distribution<> vehicleTypeDist(0, 2);
 
     map q1;
-    loadMapData(q1); 
+    loadMapData(q1);
     q1.build_adjList();
     std::cout << "Adjacency List built!\n";
 
-    // ===== QUAY LẠI TÍNH TOÁN MAPBOUNDS =====
     MapBounds bounds; 
     for (node* n : q1.getNodes()) {
         double x = n->get_x(), y = n->get_y();
         if (x < bounds.minX) bounds.minX = x; if (x > bounds.maxX) bounds.maxX = x;
         if (y < bounds.minY) bounds.minY = y; if (y > bounds.maxY) bounds.maxY = y;
     }
-    // ======================================
     
     std::map<int, node*> nodeMap;
     for (node* n : q1.getNodes()) {
@@ -196,25 +238,39 @@ int main()
     deltaClock.restart();
     
     view.setSize(sf::Vector2f(static_cast<float>(WINDOW_WIDTH), static_cast<float>(WINDOW_HEIGHT)));
-    // Căn giữa View vào trung tâm cửa sổ
     view.setCenter(sf::Vector2f(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f));
     window.setView(view);
 
-    // Bake tên địa điểm
+    // ===== "BAKE" TÊN ĐỊA ĐIỂM VÀ NÚT GIAO =====
     std::vector<sf::Text> locationNameLabels;
-    for (node* n : q1.getNodes()) {
-        junction* junc = dynamic_cast<junction*>(n);
-        if (!junc) { 
-            sf::Vector2f nodePos = project(n->get_coord(), bounds); // <-- Dùng 'bounds'
-            locationNameText.setString(n->get_name());
-            sf::FloatRect textBounds = locationNameText.getLocalBounds();
-            
-            float textWidth = textBounds.position.x + textBounds.size.x;
-            float textHeight = textBounds.position.y + textBounds.size.y;
+    std::vector<sf::Text> junctionNameLabels; // Vector riêng cho tên nút giao
 
+    for (node* n : q1.getNodes()) {
+        sf::Vector2f nodePos = project(n->get_coord(), bounds);
+        sf::FloatRect textBounds;
+        float textWidth, textHeight;
+
+        junction* junc = dynamic_cast<junction*>(n);
+        if (junc) { 
+            // NẾU LÀ NÚT GIAO (JUNCTION)
+            junctionNameText.setString(n->get_name());
+            textBounds = junctionNameText.getLocalBounds();
+            // Dùng cú pháp SFML 3.0
+            textWidth = textBounds.position.x + textBounds.size.x;
+            textHeight = textBounds.position.y + textBounds.size.y;
+            junctionNameText.setOrigin(sf::Vector2f(textWidth / 2.f, textHeight / 2.f));
+            junctionNameText.setPosition(sf::Vector2f(nodePos.x, nodePos.y + 10.f)); // Hơi dịch xuống
+            junctionNameLabels.push_back(junctionNameText);
+        } else { 
+            // NẾU LÀ ĐỊA ĐIỂM (LOCATION)
+            locationNameText.setString(n->get_name());
+            textBounds = locationNameText.getLocalBounds();
+            // Dùng cú pháp SFML 3.0
+            textWidth = textBounds.position.x + textBounds.size.x;
+            textHeight = textBounds.position.y + textBounds.size.y;
             locationNameText.setOrigin(sf::Vector2f(textWidth / 2.f, textHeight / 2.f));
-            locationNameText.setPosition(sf::Vector2f(nodePos.x, nodePos.y + 15.f)); 
-            locationNameLabels.push_back(locationNameText); 
+            locationNameText.setPosition(sf::Vector2f(nodePos.x, nodePos.y + 15.f)); // Dịch xuống nhiều hơn
+            locationNameLabels.push_back(locationNameText);
         }
     }
 
@@ -242,7 +298,7 @@ int main()
                     }
                     else if (mouseButton->button == sf::Mouse::Button::Left) {
                         sf::Vector2f worldMousePos = window.mapPixelToCoords(mouseButton->position, view);
-                        int clickedNodeId = findClosestNode(worldMousePos, nodeMap, bounds); // <-- Dùng 'bounds'
+                        int clickedNodeId = findClosestNode(worldMousePos, nodeMap, bounds);
                         if (clickedNodeId != -1) {
                             if (startNodeId == -1) {
                                 startNodeId = clickedNodeId; endNodeId = -1; currentPath.clear();
@@ -255,7 +311,7 @@ int main()
                                     if (randType == 0) type = Vehicle::VehicleType::Car;
                                     else if (randType == 1) type = Vehicle::VehicleType::Bus;
                                     else type = Vehicle::VehicleType::Truck;
-                                    vehicleManager.emplace_back(type, currentPath, nodeMap, bounds, q1); // <-- Dùng 'bounds'
+                                    vehicleManager.emplace_back(type, currentPath, nodeMap, bounds, q1); 
                                     stats.vehicleSpawned();
                                 }
                             } else {
@@ -284,18 +340,15 @@ int main()
         // === CẬP NHẬT LOGIC ===
         sf::Time dt = deltaClock.restart(); 
         float fps = 1.f / dt.asSeconds();
-        
         stats.update(fps);
-        
  	    for (node* n : q1.getNodes()) {
  	 	    junction* junc = dynamic_cast<junction*>(n);
  	 	    if (junc) { 
  	 	 	    junc->updateLight(dt);
  	 	    }
  	    }
-        
         for (auto it = vehicleManager.begin(); it != vehicleManager.end();) {
-            if (it->update(dt, nodeMap, bounds, q1, vehicleManager)) { // <-- Dùng 'bounds'
+            if (it->update(dt, nodeMap, bounds, q1, vehicleManager)) { 
                 ++it;
             } else {
                 if (it->isFinished()) {
@@ -306,21 +359,18 @@ int main()
         }
 
         // === VẼ ĐỒ HỌA ===
-        window.clear(sf::Color(50, 50, 50)); // <-- Quay lại nền đen
+        window.clear(sf::Color(50, 50, 50)); 
         window.setView(view);
-
-        // ===== ĐÃ XÓA window.draw(mapSprite) =====
 
         // 1. Vẽ đường phố
         sf::VertexArray road(sf::PrimitiveType::TriangleStrip, 4); 
         float roadThickness = 3.f; 
-        
         for (edge* edge : q1.getEdges()) { 
             node* srcNode = nodeMap[edge->get_src()];
             node* destNode = nodeMap[edge->get_dest()];
             if (srcNode && destNode) {
-                sf::Vector2f p1 = project(srcNode->get_coord(), bounds); // <-- Dùng 'bounds'
-                sf::Vector2f p2 = project(destNode->get_coord(), bounds); // <-- Dùng 'bounds'
+                sf::Vector2f p1 = project(srcNode->get_coord(), bounds); 
+                sf::Vector2f p2 = project(destNode->get_coord(), bounds); 
                 sf::Vector2f direction = p2 - p1;
                 float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
                 if (length == 0) continue; 
@@ -349,15 +399,61 @@ int main()
             }
         }
 
-        // 2. Vẽ tên địa điểm
+        // 2. VẼ TÊN ĐƯỜNG (CHỈ KHI ZOOM GẦN)
+        float currentZoom = view.getSize().x;
+        if (currentZoom < WINDOW_WIDTH * 0.5) // Chỉ hiển thị khi zoom vào 50% trở lên
+        {
+            for (edge* edge : q1.getEdges()) {
+                node* srcNode = nodeMap[edge->get_src()];
+                node* destNode = nodeMap[edge->get_dest()];
+                if (srcNode && destNode) {
+                    sf::Vector2f p1 = project(srcNode->get_coord(), bounds); 
+                    sf::Vector2f p2 = project(destNode->get_coord(), bounds); 
+                    
+                    sf::Vector2f midPoint = (p1 + p2) / 2.f;
+                    float angle = std::atan2(p2.y - p1.y, p2.x - p1.x) * 180.f / M_PI;
+                    
+                    if (angle > 90.f || angle < -90.f) {
+                        angle += 180.f;
+                    }
+                    
+                    roadNameText.setString(edge->get_name());
+
+                    // SỬA LỖI 1 & 2: Dùng .size.x, .size.y, .position.x/y
+                    sf::FloatRect textBounds = roadNameText.getLocalBounds();
+                    float textWidth = textBounds.position.x + textBounds.size.x;
+                    float textHeight = textBounds.position.y + textBounds.size.y;
+                    
+                    // ⭐ SỬA LỖI 3: Dùng sf::Vector2f() cho setOrigin (Cú pháp SFML 3.0) ⭐
+                    roadNameText.setOrigin(sf::Vector2f(textWidth / 2.f, textHeight / 2.f + 5.f)); // +5.f offset
+                    
+                    roadNameText.setPosition(midPoint);
+
+                    // SỬA LỖI 4: Dùng sf::degrees()
+                    roadNameText.setRotation(sf::degrees(angle));
+                    
+                    window.draw(roadNameText);
+                }
+            }
+        }
+
+        // 3. Vẽ tên địa điểm (LOCATION)
         for (const auto& text : locationNameLabels) {
             window.draw(text);
         }
 
-        // 3. Vẽ nút (với đèn động)
+        // 4. VẼ TÊN NÚT GIAO (JUNCTION) (CHỈ KHI ZOOM GẦN)
+        if (currentZoom < WINDOW_WIDTH * 0.8) // Zoom gần hơn một chút
+        {
+            for (const auto& text : junctionNameLabels) {
+                window.draw(text);
+            }
+        }
+
+        // 5. Vẽ nút (với đèn động)
         sf::CircleShape nodeCircle(5.f); 
         for (node* n : q1.getNodes()) {
-            sf::Vector2f nodePos = project(n->get_coord(), bounds); // <-- Dùng 'bounds'
+            sf::Vector2f nodePos = project(n->get_coord(), bounds); 
             junction* junc = dynamic_cast<junction*>(n);
             
             if (junc) { 
@@ -382,40 +478,40 @@ int main()
             window.draw(nodeCircle);
         }
 
-        // 4. Vẽ đường đi
+        // 6. Vẽ đường đi (Path)
         if (!currentPath.empty()) {
             sf::VertexArray pathLine(sf::PrimitiveType::LineStrip);
             for (int nodeId : currentPath) {
                 sf::Vertex v;
-                v.position = project(nodeMap[nodeId]->get_coord(), bounds); // <-- Dùng 'bounds'
+                v.position = project(nodeMap[nodeId]->get_coord(), bounds); 
                 v.color = sf::Color(255, 255, 0, 200);
                 pathLine.append(v);
             }
             window.draw(pathLine);
         }
 
-        // 5. Vẽ điểm chọn
+        // 7. Vẽ điểm chọn
         sf::CircleShape selectionCircle(10.f);
         selectionCircle.setOrigin(sf::Vector2f(10.f, 10.f));
         selectionCircle.setFillColor(sf::Color::Transparent);
         selectionCircle.setOutlineThickness(3.f);
         if (startNodeId != -1) {
             selectionCircle.setOutlineColor(sf::Color(0, 255, 0, 200));
-            selectionCircle.setPosition(project(nodeMap[startNodeId]->get_coord(), bounds)); // <-- Dùng 'bounds'
+            selectionCircle.setPosition(project(nodeMap[startNodeId]->get_coord(), bounds)); 
             window.draw(selectionCircle);
         }
         if (endNodeId != -1) {
             selectionCircle.setOutlineColor(sf::Color(255, 0, 0, 200));
-            selectionCircle.setPosition(project(nodeMap[endNodeId]->get_coord(), bounds)); // <-- Dùng 'bounds'
+            selectionCircle.setPosition(project(nodeMap[endNodeId]->get_coord(), bounds)); 
             window.draw(selectionCircle);
         }
 
-        // 6. Vẽ xe
+        // 8. Vẽ xe
         for (auto& vehicle : vehicleManager) {
             vehicle.draw(window);
         }
 
-        // Vẽ thống kê
+        // Vẽ thống kê (trên View mặc định)
         window.setView(window.getDefaultView());
         stats.draw(window);
         

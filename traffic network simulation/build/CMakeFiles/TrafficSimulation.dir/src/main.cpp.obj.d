@@ -329,4 +329,5 @@ CMakeFiles/TrafficSimulation.dir/src/main.cpp.obj: \
  D:/mingw64/include/c++/14.2.0/bits/stl_numeric.h \
  D:/mingw64/include/c++/14.2.0/pstl/glue_numeric_defs.h \
  C:/Users/MINHTR~1/ONEDRI~1/Desktop/BTL-DS~1/TRAFFI~1/include/ViewUtils.hpp \
- C:/Users/MINHTR~1/ONEDRI~1/Desktop/BTL-DS~1/TRAFFI~1/include/Vehicle.hpp
+ C:/Users/MINHTR~1/ONEDRI~1/Desktop/BTL-DS~1/TRAFFI~1/include/Vehicle.hpp \
+ D:/mingw64/include/c++/14.2.0/math.h

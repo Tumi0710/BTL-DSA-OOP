@@ -38,8 +38,12 @@ class map{
 	    void add_node(node* n); 
 	    void add_edge(edge* e); 
 	    
+        // HÀM CŨ (5 tham số - Tự động tính khoảng cách "chim bay")
 	    void add_edge_by_id(std::string n, int i, int id_src, int id_dest, bool dir); 
 	
+        // ⭐ HÀM MỚI (6 tham số - Nhập khoảng cách thủ công) ⭐
+        void add_edge_by_id(std::string n, int i, int id_src, int id_dest, double manual_weight_km, bool dir);
+
 	    void show_all() const;
 	    
 		node* find_node_by_id(int id) const; 
