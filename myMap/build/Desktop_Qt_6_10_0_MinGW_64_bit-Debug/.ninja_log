@@ -1,0 +1,17 @@
+# ninja log v6
+140	1118	7849860573576021	Mymap_autogen/mocs_compilation.cpp	d90ae36459307a1c
+140	1118	7849860573576021	Mymap_autogen/timestamp	d90ae36459307a1c
+18	100	7849871790286938	C:/Users/ttu19/OneDrive/Documents/myMap/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CMakeFiles/cmake.verify_globs	4657e3dad946068c
+140	1118	7849860573576021	C:/Users/ttu19/OneDrive/Documents/myMap/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/Mymap_autogen/timestamp	d90ae36459307a1c
+60	86	7849877677998494	C:/Users/ttu19/OneDrive/Documents/myMap/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/Mymap_autogen/mocs_compilation.cpp	9ceccd2007ddaec7
+1228	7085	7849857198729767	CMakeFiles/Mymap.dir/Mymap_autogen/mocs_compilation.cpp.obj	98c4fbc3b2a02556
+1235	7120	7849857198807163	CMakeFiles/Mymap.dir/main.cpp.obj	f75747c852fa6431
+8	992	7849883037607878	build.ninja	3e895682c186dae5
+61	4765	7849879935153772	CMakeFiles/myMap.dir/main.cpp.obj	891b187c8e60f48f
+79	239	7849877678206944	CMakeFiles/myMap.dir/Database.cpp.obj	73ebe7bd9eff100c
+86	5153	7849877678277385	CMakeFiles/myMap.dir/Mymap_autogen/mocs_compilation.cpp.obj	2a7bdb6d0a61dd8b
+40	4912	7849883342958063	CMakeFiles/myMap.dir/main.cpp.obj	891b187c8e60f48f
+46	5316	7849885424896093	CMakeFiles/myMap.dir/Mymap_autogen/mocs_compilation.cpp.obj	2a7bdb6d0a61dd8b
+52	5521	7849885424966090	CMakeFiles/myMap.dir/main.cpp.obj	891b187c8e60f48f
+58	7455	7849885425025025	CMakeFiles/myMap.dir/mainwindow.cpp.obj	c1e59086687f5c9c
+7456	8198	7849885499006043	myMap.exe	a3041ff272958759
