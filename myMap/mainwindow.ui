@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+
+    <!-- SIDEBAR -->
+    <item>
+     <widget class="QFrame" name="sidebar">
+      <property name="frameShape"><enum>QFrame::StyledPanel</enum></property>
+      <layout class="QVBoxLayout" name="sidebarLayout">
+       <item><widget class="QPushButton" name="btn_dashboard"><property name="text"><string>Trang chủ</string></property></widget></item>
+       <item><widget class="QPushButton" name="btn_tuyenduong"><property name="text"><string>Tuyến đường</string></property></widget></item>
+       <item><widget class="QPushButton" name="btn_nutgiao"><property name="text"><string>Nút giao</string></property></widget></item>
+       <item><widget class="QPushButton" name="btn_thongke"><property name="text"><string>Thống kê</string></property></widget></item>
+       <item>
+        <spacer name="spacer">
+         <property name="orientation"><enum>Qt::Vertical</enum></property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+
+    <!-- STACKEDWIDGET -->
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+
+      <!-- DASHBOARD -->
+      <widget class="QWidget" name="pageDashboard">
+       <layout class="QVBoxLayout">
+        <item><widget class="QLabel" name="labelHome"><property name="text"><string>Trang chủ</string></property></widget></item>
+       </layout>
+      </widget>
+
+      <!-- TUYEN DUONG -->
+      <widget class="QWidget" name="pageTuyenDuong">
+       <layout class="QVBoxLayout">
+
+        <item><widget class="QLabel"><property name="text"><string>Quản lý tuyến đường</string></property></widget></item>
+
+        <item>
+         <widget class="QTableWidget" name="tableRoutes">
+          <column><property name="text"><string>ID</string></property></column>
+          <column><property name="text"><string>Tên tuyến</string></property></column>
+          <column><property name="text"><string>Chiều dài</string></property></column>
+          <column><property name="text"><string>Điểm đầu</string></property></column>
+          <column><property name="text"><string>Điểm cuối</string></property></column>
+         </widget>
+        </item>
+
+        <!-- FORM -->
+        <item>
+         <layout class="QFormLayout">
+
+          <item row="0" column="0"><widget class="QLabel"><property name="text"><string>Tên tuyến:</string></property></widget></item>
+          <item row="0" column="1"><widget class="QLineEdit" name="txt_name"/></item>
+
+          <item row="1" column="0"><widget class="QLabel"><property name="text"><string>Chiều dài (km):</string></property></widget></item>
+          <item row="1" column="1"><widget class="QDoubleSpinBox" name="spin_length"/></item>
+
+          <item row="2" column="0"><widget class="QLabel"><property name="text"><string>Điểm đầu:</string></property></widget></item>
+          <item row="2" column="1"><widget class="QComboBox" name="cb_start"/></item>
+
+          <item row="3" column="0"><widget class="QLabel"><property name="text"><string>Điểm cuối:</string></property></widget></item>
+          <item row="3" column="1"><widget class="QComboBox" name="cb_end"/></item>
+         </layout>
+        </item>
+
+        <item>
+         <layout class="QHBoxLayout">
+          <item><widget class="QPushButton" name="btn_add"><property name="text"><string>Thêm</string></property></widget></item>
+          <item><widget class="QPushButton" name="btn_edit"><property name="text"><string>Sửa</string></property></widget></item>
+          <item><widget class="QPushButton" name="btn_delete"><property name="text"><string>Xóa</string></property></widget></item>
+         </layout>
+        </item>
+
+       </layout>
+      </widget>
+
+      <!-- NUT GIAO -->
+      <widget class="QWidget" name="pageNutGiao">
+       <layout class="QVBoxLayout">
+        <item><widget class="QLabel"><property name="text"><string>Quản lý nút giao</string></property></widget></item>
+        <item><widget class="QGraphicsView" name="gv_map"/></item>
+       </layout>
+      </widget>
+
+      <!-- THONG KE -->
+      <widget class="QWidget" name="pageThongKe">
+       <layout class="QVBoxLayout">
+        <item><widget class="QLabel"><property name="text"><string>Thống kê</string></property></widget></item>
+       </layout>
+      </widget>
+
+     </widget>
+    </item>
+
+   </layout>
+  </widget>
+ </widget>
+</ui>
