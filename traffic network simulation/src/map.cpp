@@ -144,27 +144,24 @@ std::string to_lower(const std::string& str){
 	return lower_str;
 }
 
+// ⭐ ĐÃ SỬA LỖI BUG TÌM KIẾM TẠI ĐÂY ⭐
 std::vector<node*> map::search_node_by_name(const std::string& partial_n){ 
 	std::vector<node*> rslt; 
 	std::string lower_partial = to_lower(partial_n); 
+	
+    if (lower_partial.empty()) return rslt;
+
 	for (node* n : nodes) { 
 		std::string lower_full_n = to_lower(n->get_name()); 
-		bool found = false;
-		for (size_t i = 0; i <= lower_full_n.length() - lower_partial.length(); i++){
-			bool mismatch = false;
-			for(size_t j = 0; j < lower_partial.length(); j++){
-				if(lower_full_n[i+j] != lower_partial[j]){
-					mismatch = true;
-					break;
-				}
-			}
-			if(!mismatch){
-				found = true;
-				break;
-			}
-		}
-		if(found){
+		
+        // Sử dụng hàm find có sẵn của std::string để an toàn tuyệt đối
+        // Nó sẽ trả về std::string::npos nếu không tìm thấy
+        if (lower_full_n.find(lower_partial) != std::string::npos) {
+            // Tìm thấy! Kiểm tra xem có phải là Nút Giao không (để lọc bớt rác)
             junction* junc_ptr = dynamic_cast<junction*>(n); 
+            
+            // Chỉ thêm vào kết quả nếu KHÔNG PHẢI là junction (tức là Location)
+            // Hoặc bạn có thể bỏ if này nếu muốn tìm cả giao lộ
             if (junc_ptr == NULL) { 
                 rslt.push_back(n); 
             }
