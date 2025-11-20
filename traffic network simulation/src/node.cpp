@@ -101,6 +101,7 @@ junction::LightState junction::getLightState() const {
     return m_lightState;
 }
 
+// ⭐ HÀM UPDATE LIGHT ĐÃ SỬA ĐỂ GỌI HÀM ĐIỀU CHỈNH THỜI GIAN ⭐
 void junction::updateLight(sf::Time dt) {
     if (!m_hasTrafficLight) return; 
     
@@ -113,6 +114,14 @@ void junction::updateLight(sf::Time dt) {
     
     if (totalTime >= cycleTime) {
         m_lightTimer -= m_cycleTime;
+        
+        // --- KÍCH HOẠT LOGIC ĐÈN THÔNG MINH ---
+        adjustTimingBasedOnTraffic(); 
+        
+        // Cập nhật lại biến cycleTime nội bộ vì nó vừa bị thay đổi
+        cycleTime = m_cycleTime.asSeconds(); 
+        // --------------------------------------
+        
         totalTime = m_lightTimer.asSeconds();
     }
     
@@ -153,6 +162,7 @@ bool junction::canEnter() const {
 void junction::adjustTimingBasedOnTraffic() {
     if (!m_hasTrafficLight) return;
     
+    // Logic đơn giản: Nếu đông xe (waiting > 5) -> Tăng thời gian đèn xanh
     if (m_waitingVehicles > 5) {
         m_greenDuration = sf::seconds(10.f);
         m_redDuration = sf::seconds(8.f);

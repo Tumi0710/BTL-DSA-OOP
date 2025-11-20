@@ -83,7 +83,6 @@ void map::add_edge_by_id(std::string n, int i, int id_src, int id_dest, bool dir
 		return;
 	}
 	
-    // Tự động tính khoảng cách (nên dùng Haversine nếu bạn đã sửa coord.cpp)
 	double distance = node_src->get_coord().distance(node_dest->get_coord());
 	
     edge* e = new edge(n, i, id_src, id_dest, distance, dir); 
@@ -119,7 +118,6 @@ void map::add_edge_by_id(std::string n, int i, int id_src, int id_dest, double m
 		return;
 	}
 	
-	// Sử dụng khoảng cách thủ công (km) được truyền vào
     edge* e = new edge(n, i, id_src, id_dest, manual_weight_km, dir); 
 	add_edge(e);
 
@@ -154,14 +152,8 @@ std::vector<node*> map::search_node_by_name(const std::string& partial_n){
 	for (node* n : nodes) { 
 		std::string lower_full_n = to_lower(n->get_name()); 
 		
-        // Sử dụng hàm find có sẵn của std::string để an toàn tuyệt đối
-        // Nó sẽ trả về std::string::npos nếu không tìm thấy
         if (lower_full_n.find(lower_partial) != std::string::npos) {
-            // Tìm thấy! Kiểm tra xem có phải là Nút Giao không (để lọc bớt rác)
             junction* junc_ptr = dynamic_cast<junction*>(n); 
-            
-            // Chỉ thêm vào kết quả nếu KHÔNG PHẢI là junction (tức là Location)
-            // Hoặc bạn có thể bỏ if này nếu muốn tìm cả giao lộ
             if (junc_ptr == NULL) { 
                 rslt.push_back(n); 
             }
@@ -204,6 +196,7 @@ void map::build_adjList(){
     std::cout << "Adjacency List built!\n"; 
 }
 
+// ⭐ HÀM DIJKSTRA ĐÃ CẬP NHẬT LOGIC TRỌNG SỐ ĐỘNG (DYNAMIC WEIGHT) ⭐
 std::vector<int> map::dijkstra(int startId, int endId) { 
     std::map<int, double> dist; 
     std::map<int, int> prev;   
@@ -214,23 +207,45 @@ std::vector<int> map::dijkstra(int startId, int endId) {
     }
     dist[startId] = 0;
     pq.push({0.0, startId}); 
+    
     while (!pq.empty()) {
         double d = pq.top().first;
         int u = pq.top().second;
         pq.pop();
+        
         if (d > dist[u]) { continue; }
         if (u == endId) { break; }
+        
+        // --- SỬA ĐỔI LOGIC TÍNH TRỌNG SỐ TẠI ĐÂY ---
         for (const auto& neighbor : adjList.at(u)) {
             int v = neighbor.id;
-            double weight = neighbor.weight;
-            double newDist = dist[u] + weight;
+            double staticWeight = neighbor.weight; // Khoảng cách vật lý (km)
+
+            // Lấy thông tin cạnh nối u và v để xem có bao nhiêu xe
+            double trafficPenalty = 1.0; // Mặc định là 1.0 (không phạt)
+            edge* currentEdge = getEdge(u, v);
+            
+            if (currentEdge != nullptr) {
+                int carCount = currentEdge->getVehicleCount();
+                // CÔNG THỨC TRỌNG SỐ ĐỘNG:
+                // Ví dụ: Cứ mỗi xe làm đường "khó đi" thêm 50%
+                trafficPenalty = 1.0 + (carCount * 0.5); 
+            }
+            
+            // Trọng số cuối cùng = Khoảng cách * Hệ số tắc đường
+            double dynamicWeight = staticWeight * trafficPenalty;
+
+            double newDist = dist[u] + dynamicWeight; 
+            
             if (newDist < dist[v]) {
                 dist[v] = newDist;
                 prev[v] = u; 
                 pq.push({newDist, v}); 
             }
         }
+        // ----------------------------------------------
     }
+    
     std::vector<int> path; 
     int curr = endId;
     if (prev[curr] == -1) { return path; }
