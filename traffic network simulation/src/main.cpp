@@ -22,7 +22,7 @@
 
 using namespace map_types;
 
-// --- GIAO DIỆN & THỐNG KÊ ---
+// Lop quan ly viec hien thi thong tin thong ke len man hinh
 class Statistics {
 private:
     sf::Font font;
@@ -100,17 +100,17 @@ public:
     }
 };
 
-// Biến toàn cục
+// Cac bien toan cuc quan ly trang thai game
 int startNodeId = -1;
 int endNodeId = -1; 
 std::vector<int> currentPath; 
 std::list<Vehicle> vehicleManager;
 sf::Clock deltaClock; 
 
-// Biến hỗ trợ kéo thả chuột trái
+// Bien ho tro viec keo tha ban do bang chuot
 bool isPanning = false;
-sf::Vector2i panStartPos;       // Vị trí chuột (Pixel)
-sf::Vector2i originalClickPos;  // Vị trí chuột gốc (Pixel)
+sf::Vector2i panStartPos;       // Vi tri chuot ban dau
+sf::Vector2i originalClickPos;  // Vi tri click goc de phan biet click voi keo
 
 sf::View view; 
 
@@ -207,7 +207,7 @@ void handleConsoleInput(sf::RenderWindow& window, map& worldMap, const std::map<
     deltaClock.restart();  
 }
 
-// ===== HÀM loadMapData (ĐẦY ĐỦ) =====
+// Ham nap du lieu ban do
 void loadMapData(map& q1) {
     std::cout << "Loading map data...\n";
     // Locations
@@ -330,7 +330,7 @@ void loadMapData(map& q1) {
     q1.add_edge_by_id("Loi vao Buu Dien", 19106, 19, 106, 0.02, 0);
     q1.add_edge_by_id("Loi vao Diamond Plaza", 20108, 20, 108, 0.05, 0);
 
-    // --- CẤU HÌNH ĐÈN GIAO THÔNG ---
+    // Cau hinh den giao thong
 	dynamic_cast<junction*>(q1.find_node_by_id(102))->setHasTrafficLight(true, 7.f, 2.f, 9.f, 0.0f);
 	dynamic_cast<junction*>(q1.find_node_by_id(103))->setHasTrafficLight(true, 6.f, 2.f, 8.f, 0.33f);
 	dynamic_cast<junction*>(q1.find_node_by_id(106))->setHasTrafficLight(true, 8.f, 2.f, 10.f, 0.66f);
@@ -372,7 +372,7 @@ int findClosestNode(sf::Vector2f worldMousePos,
 
 int main()
 {
-    // ⭐ MÀU NỀN XÁM (50, 50, 50) ⭐
+    // Mau nen cua so (mau xam)
     sf::RenderWindow window(sf::VideoMode(sf::Vector2u(WINDOW_WIDTH, WINDOW_HEIGHT)), "Traffic Simulation - Optimized");
     window.setFramerateLimit(60);
 
@@ -386,7 +386,7 @@ int main()
     sf::Text locationNameText(font, "", 12);
     locationNameText.setFillColor(sf::Color(220, 220, 220)); 
 
-    // ⭐ KHÔNG HIỂN THỊ TÊN GIAO LỘ (JUNCTION) NHƯ YÊU CẦU ⭐
+    // An ten giao lo de do roi mat
     // sf::Text junctionNameText(font, "", 9); 
     // junctionNameText.setFillColor(sf::Color(150, 150, 150)); 
 
@@ -417,8 +417,7 @@ int main()
     window.setView(view);
 
     std::vector<sf::Text> locationNameLabels;
-    // std::vector<sf::Text> junctionNameLabels; // BỎ VECTOR NÀY
-
+    
     for (node* n : q1.getNodes()) {
         sf::Vector2f nodePos = project(n->get_coord(), bounds);
         sf::FloatRect textBounds;
@@ -426,9 +425,9 @@ int main()
 
         junction* junc = dynamic_cast<junction*>(n);
         if (junc) { 
-            // ⭐ BỎ QUA VIỆC TẠO LABEL CHO JUNCTION
+            // Khong hien thi ten cho cac giao lo
         } else { 
-            // Sử dụng sf::String::fromUtf8 để hiển thị tên Tiếng Việt đúng
+            // Su dung chuoi UTF-8 de hien thi tieng Viet
             std::string name = n->get_name();
             locationNameText.setString(sf::String::fromUtf8(name.begin(), name.end()));
             
@@ -441,7 +440,7 @@ int main()
         }
     }
 
-    // Biến cho chức năng Kéo/Thả
+    // Bien ho tro chuc nang keo tha ban do
     bool isPanning = false;
     sf::Vector2i panStartPos;
     sf::Vector2i originalClickPos;
@@ -467,7 +466,7 @@ int main()
                     if (mouseWheel->delta > 0) view.zoom(0.9f); 
                     else if (mouseWheel->delta < 0) view.zoom(1.1f); 
                 }
-                // MOUSE PRESSED
+                // Xu ly su kien nhan chuot
                 else if (const auto* mouseButton = event->getIf<sf::Event::MouseButtonPressed>()) {
                     if (mouseButton->button == sf::Mouse::Button::Left) {
                         isPanning = true; 
@@ -478,14 +477,14 @@ int main()
                         startNodeId = -1; endNodeId = -1; currentPath.clear();
                     }
                 }
-                // MOUSE RELEASED (Check for Click vs Drag)
+                // Xu ly su kien nha chuot
                 else if (const auto* mouseButton = event->getIf<sf::Event::MouseButtonReleased>()) {
                     if (mouseButton->button == sf::Mouse::Button::Left) {
                         isPanning = false;
                         int dx = mouseButton->position.x - originalClickPos.x;
                         int dy = mouseButton->position.y - originalClickPos.y;
                         
-                        // If drag distance < 5px, consider it a CLICK
+                        // Neu khoang cach keo nho hon 5px thi coi nhu la click
                         if (dx*dx + dy*dy < 25) {
                             sf::Vector2f worldMousePos = window.mapPixelToCoords(mouseButton->position, view);
                             int clickedNodeId = findClosestNode(worldMousePos, nodeMap, bounds);
@@ -507,7 +506,7 @@ int main()
                         }
                     }
                 }
-                // MOUSE MOVED (Pan map)
+                // Xu ly su kien di chuyen chuot (keo ban do)
                 else if (const auto* mouseMove = event->getIf<sf::Event::MouseMoved>()) {
                     if (isPanning) {
                         sf::Vector2f currentPos = window.mapPixelToCoords(mouseMove->position, view);
@@ -542,7 +541,7 @@ int main()
             }
         }
 
-        // ⭐ NỀN MÀU XÁM (50, 50, 50) ⭐
+        // Ve mau nen xam
         window.clear(sf::Color(50, 50, 50)); 
         window.setView(view);
 
@@ -564,13 +563,13 @@ int main()
                 int carCount = edge->getVehicleCount();
                 sf::Color roadColor;
                 if (carCount > 6) { 
-                    roadColor = sf::Color(200, 30, 30, 220);
+                    roadColor = sf::Color(200, 30, 30, 220); // Tac duong nang (Do)
                 } else if (carCount > 3) { 
-                    roadColor = sf::Color(230, 160, 0, 200);
+                    roadColor = sf::Color(230, 160, 0, 200); // Dong xe (Vang cam)
                 } else if (carCount > 0) {
-                    roadColor = sf::Color(150, 150, 50, 200);
+                    roadColor = sf::Color(150, 150, 50, 200); // Binh thuong
                 } else { 
-                    // ⭐ MÀU ĐƯỜNG SÁNG HƠN (130, 130, 130) ĐỂ DỄ NHÌN TRÊN NỀN XÁM ⭐
+                    // Mau duong sang hon mot chut de de nhin tren nen xam
                     roadColor = sf::Color(130, 130, 130, 200); 
                 }
 
@@ -600,7 +599,7 @@ int main()
                         angle += 180.f;
                     }
                     
-                    // Chuyển đổi tên đường sang UTF-8 để hiển thị
+                    // Chuyen doi ten duong sang UTF-8
                     std::string name = edge->get_name();
                     roadNameText.setString(sf::String::fromUtf8(name.begin(), name.end()));
 
@@ -622,9 +621,6 @@ int main()
         for (const auto& text : locationNameLabels) {
             window.draw(text);
         }
-
-        // ⭐ KHÔNG VẼ TÊN GIAO LỘ NỮA ⭐
-        // if (currentZoom < WINDOW_WIDTH * 0.8) { for (const auto& text : junctionNameLabels) ... }
 
         sf::CircleShape nodeCircle(5.f); 
         for (node* n : q1.getNodes()) {

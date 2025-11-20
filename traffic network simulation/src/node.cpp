@@ -4,7 +4,7 @@
 using namespace std;
 using namespace map_types;
 
-// ============= NODE BASE CLASS =============
+// ============= LOP NODE CO BAN =============
 node::node() : name(""), id(0), pos(0, 0){}
 node::node(string n, int i, double x_pos, double y_pos)
     : name(n), id(i), pos(x_pos, y_pos){}
@@ -21,7 +21,7 @@ void node::display_name() const{
 	cout << "[ID: " << id << "]" << name << endl;
 }
 
-// ============= LOCATION CLASS =============
+// ============= LOP LOCATION (DIA DIEM) =============
 location::location(string n, int i, double x_pos, double y_pos, int pop, lo_type t)
     : node(n, i, x_pos, y_pos), population(pop), type(t){}
 void location::display() const{
@@ -30,7 +30,7 @@ void location::display() const{
     cout << " - Population: " << population << endl;
 }
 
-// ============= JUNCTION CLASS =============
+// ============= LOP JUNCTION (GIAO LO) =============
 junction::junction(string n, int i, double x_pos, double y_pos, map_types::junction_type t)
  : node(n, i, x_pos, y_pos), 
    type(t),
@@ -69,7 +69,7 @@ int junction::get_max_branches() const{
     return 100;
 }
 
-// Hệ thống đèn với độ lệch pha
+// Thiet lap den tin hieu va do lech pha (de tao lan song xanh)
 void junction::setHasTrafficLight(bool hasLight, float greenSecs, float yellowSecs, float redSecs, float phaseOffset) {
     m_hasTrafficLight = hasLight;
     m_greenDuration = sf::seconds(greenSecs);
@@ -101,7 +101,7 @@ junction::LightState junction::getLightState() const {
     return m_lightState;
 }
 
-// ⭐ HÀM UPDATE LIGHT ĐÃ SỬA ĐỂ GỌI HÀM ĐIỀU CHỈNH THỜI GIAN ⭐
+// Cap nhat trang thai den theo thoi gian
 void junction::updateLight(sf::Time dt) {
     if (!m_hasTrafficLight) return; 
     
@@ -115,12 +115,10 @@ void junction::updateLight(sf::Time dt) {
     if (totalTime >= cycleTime) {
         m_lightTimer -= m_cycleTime;
         
-        // --- KÍCH HOẠT LOGIC ĐÈN THÔNG MINH ---
+        // Tu dong dieu chinh thoi gian den neu tac duong
         adjustTimingBasedOnTraffic(); 
         
-        // Cập nhật lại biến cycleTime nội bộ vì nó vừa bị thay đổi
         cycleTime = m_cycleTime.asSeconds(); 
-        // --------------------------------------
         
         totalTime = m_lightTimer.asSeconds();
     }
@@ -153,16 +151,17 @@ bool junction::canEnter() const {
     
     if (m_lightState == LightState::Green) return true;
     if (m_lightState == LightState::Yellow) {
+        // Neu den vang sap het thi khong duoc vuot
         float yellowRemaining = m_greenDuration.asSeconds() + m_yellowDuration.asSeconds() - m_lightTimer.asSeconds();
         return yellowRemaining > 0.5f;
     }
     return false;
 }
 
+// Logic dieu chinh thoi gian den dua tren so luong xe cho
 void junction::adjustTimingBasedOnTraffic() {
     if (!m_hasTrafficLight) return;
     
-    // Logic đơn giản: Nếu đông xe (waiting > 5) -> Tăng thời gian đèn xanh
     if (m_waitingVehicles > 5) {
         m_greenDuration = sf::seconds(10.f);
         m_redDuration = sf::seconds(8.f);
@@ -177,7 +176,7 @@ void junction::adjustTimingBasedOnTraffic() {
     m_cycleTime = m_greenDuration + m_yellowDuration + m_redDuration;
 }
 
-// Hệ thống đèn thông minh với phases
+// Cac ham ho tro logic den thong minh phuc tap hon
 void junction::setSmartTrafficLight(bool enable, const std::vector<float>& phaseDurations) {
     m_hasTrafficLight = enable;
     if (enable && !phaseDurations.empty()) {

@@ -49,12 +49,11 @@ class junction : public node{
 		 sf::Time m_yellowDuration;
 		 sf::Time m_redDuration;
 		 
-		 // Quản lý xe chờ
-		 int m_waitingVehicles;
+		 int m_waitingVehicles; // So luong xe dang cho den do
 		 sf::Time m_cycleTime;
 		 float m_phaseOffset;
 
-		 // Hệ thống đèn thông minh
+		 // Cau truc cho den giao thong thong minh
 		 struct TrafficPhase {
 		     sf::Time duration;
 		     std::vector<int> allowedDirections;
@@ -69,7 +68,7 @@ class junction : public node{
 		void determine_type(int branch_cnt);
 		int get_max_branches() const; 
 		
-		// Hệ thống đèn cơ bản
+		// Thiet lap den giao thong co ban
 		void setHasTrafficLight(bool hasLight, 
 		                       float greenSecs = 7.f, 
 		                       float yellowSecs = 2.f, 
@@ -80,16 +79,15 @@ class junction : public node{
 		LightState getLightState() const; 
 		void updateLight(sf::Time dt); 
 		
-		// Quản lý hàng đợi
 		void addWaitingVehicle();
 		void removeWaitingVehicle();
 		int getWaitingVehicles() const;
 		bool canEnter() const;
 
-		// Điều chỉnh động
+		// Dieu chinh thoi gian den dua theo luu luong xe
 		void adjustTimingBasedOnTraffic();
 
-		// Hệ thống đèn thông minh
+		// Logic den giao thong phuc tap (Smart Traffic Light)
 		void setSmartTrafficLight(bool enable, const std::vector<float>& phaseDurations = {});
 		void addAllowedDirection(int phase, int fromNode, int toNode);
 		bool canVehicleProceed(int fromNode, int toNode) const;

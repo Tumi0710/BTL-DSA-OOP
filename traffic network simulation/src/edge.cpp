@@ -4,14 +4,11 @@
 
 using namespace std;
 
-// ham dung --------------------------------
-edge::edge() : name(""), id(0), src(0), dest(0), weight(0), is_directed(false), m_vehicleCount(0) {} // <-- Khởi tạo
+edge::edge() : name(""), id(0), src(0), dest(0), weight(0), is_directed(false), m_vehicleCount(0) {}
 
 edge::edge(string n, int i, int s, int d, double w, bool dir)
-	: name(n), id(i), src(s), dest(d), weight(w), is_directed(dir), m_vehicleCount(0) {} // <-- Khởi tạo
+	: name(n), id(i), src(s), dest(d), weight(w), is_directed(dir), m_vehicleCount(0) {}
 
-
-//get set ----------------------------------
 string edge::get_name() const{ return name; } 
 int edge::get_id() const{ return id; }
 int edge::get_src() const{ return src; }
@@ -19,7 +16,6 @@ int edge::get_dest() const{ return dest; }
 bool edge::get_direction() const {return is_directed; }
 double edge::get_weight() const { return weight; }
 
-//phuong thucs ------------------------------
 void edge::display() const{
 	cout << "Edge [" << id << "] " << name
          << " (" << src << ", " << dest << ")\n";
@@ -30,7 +26,7 @@ void edge::display() const{
 	cout << " - Do dai: " << setprecision(2) << weight << " km" << endl;
 }
 
-// --- ⭐ NÂNG CẤP "GOOGLE MAPS" ---
+// Tang giam so luong xe de tinh toan trong so cho thuat toan tim duong
 void edge::addVehicle() {
     m_vehicleCount++;
 }
@@ -44,4 +40,3 @@ void edge::removeVehicle() {
 int edge::getVehicleCount() const {
     return m_vehicleCount;
 }
-// -------------------------------

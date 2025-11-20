@@ -5,7 +5,6 @@
 #include <cmath>
 #include <list> 
 
-// Sửa Constructor để nhận 'bounds'
 Vehicle::Vehicle(VehicleType type, const std::vector<int>& p, const std::map<int, node*>& nodeMap, const MapBounds& bounds, map& worldMap)
     : path(p), pathIndex(0), m_type(type), finished(false), m_isStopped(false), m_currentEdge(nullptr),
       m_totalDistanceKm(0.0)
@@ -26,12 +25,12 @@ Vehicle::Vehicle(VehicleType type, const std::vector<int>& p, const std::map<int
     
     m_currentSpeed = m_maxSpeed;
     m_currentNodeId = path[0]; 
-    position = getNodePosition(m_currentNodeId, nodeMap, bounds); // Dùng 'bounds'
+    position = getNodePosition(m_currentNodeId, nodeMap, bounds); 
     shape.setPosition(position);
     
     if (path.size() > 1) {
         m_targetNodeId = path[1]; 
-        targetPos = getNodePosition(m_targetNodeId, nodeMap, bounds); // Dùng 'bounds'
+        targetPos = getNodePosition(m_targetNodeId, nodeMap, bounds); 
         m_currentEdge = worldMap.getEdge(m_currentNodeId, m_targetNodeId);
         if (m_currentEdge) {
             m_currentEdge->addVehicle();
@@ -41,16 +40,14 @@ Vehicle::Vehicle(VehicleType type, const std::vector<int>& p, const std::map<int
     }
 }
 
-// Sửa hàm này để nhận 'bounds'
 sf::Vector2f Vehicle::getNodePosition(int nodeId, const std::map<int, node*>& nodeMap, const MapBounds& bounds) {
     node* n = nodeMap.at(nodeId); 
-    return project(n->get_coord(), bounds); // Dùng hàm project cũ
+    return project(n->get_coord(), bounds); 
 }
 
-// Sửa hàm update để nhận 'bounds'
 bool Vehicle::update(sf::Time dt, 
                     const std::map<int, node*>& nodeMap, 
-                    const MapBounds& bounds, // <-- Dùng MapBounds
+                    const MapBounds& bounds, 
                     map& worldMap,
                     const std::list<Vehicle>& allVehicles)
 {
@@ -75,13 +72,16 @@ bool Vehicle::update(sf::Time dt,
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
     if (distance < 0.1f) distance = 0.0f;
     
+    // Logic xu ly tai giao lo
     if (targetJunc) {
+        // Kiem tra den giao thong
         if (targetJunc->hasTrafficLight()) {
             if (!targetJunc->canEnter()) {
                 mustStop = true;
             }
         }
         
+        // Kiem tra va cham voi xe khac phia truoc
         if (!mustStop) {
             for (const auto& other : allVehicles) {
                 if (&other == this) continue; 
@@ -108,6 +108,7 @@ bool Vehicle::update(sf::Time dt,
         }
     }
     
+    // Giam toc do khi den gan dich
     if (distance < SLOW_DISTANCE && !mustStop && !shouldSlow) {
         float slowFactor = distance / SLOW_DISTANCE;
         m_currentSpeed = m_maxSpeed * std::max(0.3f, slowFactor);
@@ -135,6 +136,7 @@ bool Vehicle::update(sf::Time dt,
         }
     }
     else if (moveAmount >= distance) {
+        // Da den mot diem nut, chuyen sang diem tiep theo trong lo trinh
         position = targetPos;
         pathIndex++; 
         
@@ -154,7 +156,7 @@ bool Vehicle::update(sf::Time dt,
             return false;
         } else {
             m_targetNodeId = path[pathIndex]; 
-            targetPos = getNodePosition(m_targetNodeId, nodeMap, bounds); // Dùng 'bounds'
+            targetPos = getNodePosition(m_targetNodeId, nodeMap, bounds); 
             m_currentEdge = worldMap.getEdge(m_currentNodeId, m_targetNodeId);
             if (m_currentEdge) m_currentEdge->addVehicle();
         }
@@ -167,7 +169,6 @@ bool Vehicle::update(sf::Time dt,
     return true; 
 }
 
-// ===== GETTERS & DRAW =====
 bool Vehicle::isStopped() const {
     return m_isStopped;
 }

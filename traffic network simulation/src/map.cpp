@@ -65,7 +65,7 @@ void map::show_all() const{
     }
 }
 
-// HÀM CŨ (5 tham số - Tự động tính khoảng cách "chim bay")
+// Ham them canh va tu dong tinh khoang cach dua tren toa do
 void map::add_edge_by_id(std::string n, int i, int id_src, int id_dest, bool dir){
 	node* node_src = get_node(id_src);
 	node* node_dest = get_node(id_dest);
@@ -100,7 +100,7 @@ void map::add_edge_by_id(std::string n, int i, int id_src, int id_dest, bool dir
     }
 }
 
-// ⭐ HÀM MỚI (6 tham số - Nhận khoảng cách thủ công) ⭐
+// Ham them canh nhung cho phep nhap tay khoang cach (de chinh xac hon)
 void map::add_edge_by_id(std::string n, int i, int id_src, int id_dest, double manual_weight_km, bool dir){
 	node* node_src = get_node(id_src);
 	node* node_dest = get_node(id_dest);
@@ -142,7 +142,6 @@ std::string to_lower(const std::string& str){
 	return lower_str;
 }
 
-// ⭐ ĐÃ SỬA LỖI BUG TÌM KIẾM TẠI ĐÂY ⭐
 std::vector<node*> map::search_node_by_name(const std::string& partial_n){ 
 	std::vector<node*> rslt; 
 	std::string lower_partial = to_lower(partial_n); 
@@ -196,7 +195,6 @@ void map::build_adjList(){
     std::cout << "Adjacency List built!\n"; 
 }
 
-// ⭐ HÀM DIJKSTRA ĐÃ CẬP NHẬT LOGIC TRỌNG SỐ ĐỘNG (DYNAMIC WEIGHT) ⭐
 std::vector<int> map::dijkstra(int startId, int endId) { 
     std::map<int, double> dist; 
     std::map<int, int> prev;   
@@ -216,23 +214,21 @@ std::vector<int> map::dijkstra(int startId, int endId) {
         if (d > dist[u]) { continue; }
         if (u == endId) { break; }
         
-        // --- SỬA ĐỔI LOGIC TÍNH TRỌNG SỐ TẠI ĐÂY ---
+        // Duyet qua cac canh ke de tinh toan duong di
         for (const auto& neighbor : adjList.at(u)) {
             int v = neighbor.id;
-            double staticWeight = neighbor.weight; // Khoảng cách vật lý (km)
+            double staticWeight = neighbor.weight; // Khoảng cách thuc te
 
-            // Lấy thông tin cạnh nối u và v để xem có bao nhiêu xe
-            double trafficPenalty = 1.0; // Mặc định là 1.0 (không phạt)
+            // Tinh toan he so tac duong dua tren so luong xe dang di
+            double trafficPenalty = 1.0; 
             edge* currentEdge = getEdge(u, v);
             
             if (currentEdge != nullptr) {
                 int carCount = currentEdge->getVehicleCount();
-                // CÔNG THỨC TRỌNG SỐ ĐỘNG:
-                // Ví dụ: Cứ mỗi xe làm đường "khó đi" thêm 50%
+                // Cang nhieu xe, trong so cang cao (kho di hon)
                 trafficPenalty = 1.0 + (carCount * 0.5); 
             }
             
-            // Trọng số cuối cùng = Khoảng cách * Hệ số tắc đường
             double dynamicWeight = staticWeight * trafficPenalty;
 
             double newDist = dist[u] + dynamicWeight; 
@@ -243,7 +239,6 @@ std::vector<int> map::dijkstra(int startId, int endId) {
                 pq.push({newDist, v}); 
             }
         }
-        // ----------------------------------------------
     }
     
     std::vector<int> path; 

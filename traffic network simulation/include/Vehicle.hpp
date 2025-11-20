@@ -6,7 +6,7 @@
 #include <memory>
 #include <SFML/System/Clock.hpp>
 #include "node.hpp"
-#include "ViewUtils.hpp" // Bao gồm MapBounds
+#include "ViewUtils.hpp" 
 
 class map;
 class edge; 
@@ -31,17 +31,15 @@ private:
     sf::Clock m_travelTimer;
     double m_totalDistanceKm;
 
-    // Sửa chữ ký hàm này
     sf::Vector2f getNodePosition(int nodeId, const std::map<int, node*>& nodeMap, const MapBounds& bounds);
 
 public:
-    // Sửa chữ ký hàm Constructor
     Vehicle(VehicleType type, const std::vector<int>& p, const std::map<int, node*>& nodeMap, const MapBounds& bounds, map& worldMap);
     
-    // Sửa chữ ký hàm update
+    // Ham cap nhat vi tri va trang thai xe
     bool update(sf::Time dt, 
                 const std::map<int, node*>& nodeMap, 
-                const MapBounds& bounds, // <-- Dùng MapBounds
+                const MapBounds& bounds, 
                 map& worldMap,
                 const std::list<Vehicle>& allVehicles);
     

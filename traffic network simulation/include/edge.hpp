@@ -10,7 +10,7 @@ class edge{
 		double weight;
 		bool is_directed; 
 		
-		int m_vehicleCount; // (Cần cho logic Google Maps)
+		int m_vehicleCount; // So luong xe dang di tren canh nay (dung de tinh tac duong)
 		
 	public:
 		edge();
@@ -26,7 +26,7 @@ class edge{
 		virtual void display() const;
 		virtual ~edge() = default;
 
-		// (Cần cho logic Google Maps)
+		// Quan ly so luong xe tren duong
 		void addVehicle();
 		void removeVehicle();
 		int getVehicleCount() const;
